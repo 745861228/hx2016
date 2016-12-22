@@ -14,7 +14,7 @@ import java.util.List;
 import static android.content.ContentValues.TAG;
 
 /**
- * Created by xichen on 2016/12/22.
+ * Created by LiKe on 2016/12/22.
  */
 
 public class MyApplication extends Application {
