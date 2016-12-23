@@ -10,6 +10,7 @@ import android.support.v4.app.NotificationCompat;
 
 import com.bawei.hx2016.ChatActivity;
 import com.bawei.hx2016.R;
+import com.bawei.hx2016.RequestFriendActivity;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.chat.EMClient;
 
@@ -53,7 +54,7 @@ public class MyService extends Service {
             @Override
             public void onContactInvited(String username, String reason) {
                 //收到好友邀请
-                sendNotification(username, username + "请求加你为好友", ChatActivity.class);
+                sendNotification(username, username + "请求加你为好友", RequestFriendActivity.class);
             }
 
             @Override
