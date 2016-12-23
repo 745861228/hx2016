@@ -2,9 +2,18 @@ package com.bawei.hx2016.app;
 
 import android.app.ActivityManager;
 import android.app.Application;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
+import com.bawei.hx2016.ChatActivity;
+import com.bawei.hx2016.MainActivity;
+import com.bawei.hx2016.services.MyService;
+import com.hyphenate.EMContactListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
 
@@ -25,6 +34,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        //环信初始化配置
         EMOptions options = new EMOptions();
         // 默认添加好友时，是不需要验证的，改成需要验证
         options.setAcceptInvitationAlways(false);
@@ -47,9 +57,20 @@ public class MyApplication extends Application {
         EMClient.getInstance().init(this, options);
         //在做打包混淆时，关闭debug模式，避免消耗不必要的资源
         EMClient.getInstance().setDebugMode(true);
+        //环信初始化配置完成
+
+        //启动好友服务
+        Intent intent = new Intent(this, MyService.class);
+        startService(intent);
     }
 
 
+    /**
+     * 环信查询 process name
+     *
+     * @param pID
+     * @return
+     */
     private String getAppName(int pID) {
         String processName = null;
         ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
@@ -69,4 +90,6 @@ public class MyApplication extends Application {
         }
         return processName;
     }
+
+
 }

@@ -1,6 +1,5 @@
 package com.bawei.hx2016;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,12 +12,24 @@ public class ChatActivity extends BaseActivity {
     private Button chat_contentBut;
     private ListView chatList;
     private EditText chat_contentEt;
+    private String userName;
+    private Button userNameBut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        initData();
         initView();
+    }
+
+    /**
+     * 初始化数据
+     */
+    private void initData() {
+        userNameBut = (Button) findViewById(R.id.username_but);
+        userName = getIntent().getStringExtra("userName");
+        userNameBut.setText(userName);
     }
 
     /**

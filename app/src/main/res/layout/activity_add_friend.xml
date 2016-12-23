@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_add_friend"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.bawei.hx2016.AddFriendActivity">
+
+    <EditText
+        android:id="@+id/addFriend_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="请输入查找的好友账号" />
+
+    <Button
+        android:id="@+id/addFriend_but"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="确认" />
+</LinearLayout>
