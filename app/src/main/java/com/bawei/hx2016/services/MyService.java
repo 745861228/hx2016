@@ -7,12 +7,15 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.bawei.hx2016.ChatActivity;
 import com.bawei.hx2016.R;
 import com.bawei.hx2016.RequestFriendActivity;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.chat.EMClient;
+
+import static android.content.ContentValues.TAG;
 
 public class MyService extends Service {
     private void sendNotification(String username, String message, Class activity) {
@@ -42,13 +45,15 @@ public class MyService extends Service {
         EMClient.getInstance().contactManager().setContactListener(new EMContactListener() {
             @Override
             public void onContactAgreed(String username) {
+                Log.i(TAG, "onContactAgreed: "+username);
                 //好友请求被同意
-                sendNotification(username, username + "同意了你的请求,找他聊聊天吧", ChatActivity.class);
+              //  sendNotification(username, username + "同意了你的请求,找他聊聊天吧", ChatActivity.class);
             }
 
             @Override
             public void onContactRefused(String username) {
                 //好友请求被拒绝
+                Log.i(TAG, "onContactAgreed: "+username);
             }
 
             @Override
