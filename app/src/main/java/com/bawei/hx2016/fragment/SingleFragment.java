@@ -9,12 +9,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bawei.hx2016.AddFriendActivity;
+import com.bawei.hx2016.ChatActivity;
 import com.bawei.hx2016.R;
 import com.bawei.hx2016.bean.FriendBean;
 import com.bawei.hx2016.utils.DBUtils;
@@ -44,7 +46,6 @@ public class SingleFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         viewRoot = inflater.inflate(R.layout.single_chat, null);
-        initData();
         initView();
         return viewRoot;
     }
@@ -53,9 +54,13 @@ public class SingleFragment extends Fragment implements View.OnClickListener {
         usernames.clear();
         try {
             List<FriendBean> all = DBUtils.getDbUtilsInstance().findAll(FriendBean.class);//通过类型查找
-            for (int i = 0; i < all.size(); i++) {
-                usernames.add(all.get(0));
+
+            if(DBUtils.getDbUtilsInstance().findAll(FriendBean.class)==null)
+            {
+                return;
             }
+            usernames.addAll(all);
+
         } catch (DbException e) {
             e.printStackTrace();
         }
@@ -77,8 +82,15 @@ public class SingleFragment extends Fragment implements View.OnClickListener {
         addFriendBut = (Button) viewRoot.findViewById(R.id.add_friend_but);
 
         addFriendBut.setOnClickListener(this);
-        if(usernames.size()!=0)
-        {
+
+        friendLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent in=new Intent(getActivity(), ChatActivity.class);
+                in.putExtra("userName",usernames.get(position).getName());
+                startActivity(in);
+            }
+        });
             baseAdapter = new BaseAdapter() {
                 @Override
                 public int getCount() {
@@ -104,7 +116,7 @@ public class SingleFragment extends Fragment implements View.OnClickListener {
                 }
             };
             friendLv.setAdapter(baseAdapter);
-        }
+
     }
 
     @Override

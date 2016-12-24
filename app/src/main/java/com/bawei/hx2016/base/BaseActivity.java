@@ -15,7 +15,7 @@ public class BaseActivity extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
     }
 
-    protected void enterActivity(Class activity){
+    public void enterActivity(Class activity){
         startActivity(new Intent(this,activity));
     }
 }

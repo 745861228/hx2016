@@ -1,13 +1,16 @@
 package com.bawei.hx2016;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
 import com.bawei.hx2016.base.BaseActivity;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMMessage;
 
-public class ChatActivity extends BaseActivity {
+public class ChatActivity extends BaseActivity{
 
     private Button chat_contentBut;
     private ListView chatList;
