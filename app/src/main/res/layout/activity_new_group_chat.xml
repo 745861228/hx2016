@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_new_group_chat"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <EditText
+        android:id="@+id/newGroup_name_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="群聊名称" />
+
+    <EditText
+        android:id="@+id/newGroup_info_et"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:gravity="top"
+        android:hint="群聊简介" />
+
+
+    <Button
+        android:id="@+id/newGroup_commit_but"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:text="保存" />
+
+</LinearLayout>

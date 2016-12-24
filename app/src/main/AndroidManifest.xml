@@ -28,10 +28,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity">
+        <activity android:name=".LoginActivity" android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -72,6 +71,10 @@
             android:enabled="true"
             android:exported="true" />
 
+        <activity android:name=".RequestFriendActivity" />
+        <activity android:name=".NewGroupChatActivity" />
+        <activity android:name=".GroupMessageActivity" />
+        <activity android:name=".GroupManageActivity"></activity>
         <activity android:name=".RequestFriendActivity"></activity>
         <activity android:name=".ChatActivity$ChatActivity" />
     </application>

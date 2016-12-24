@@ -6,11 +6,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.bawei.hx2016.base.BaseActivity;
+import com.bawei.hx2016.fragment.GroupFragment;
 import com.bawei.hx2016.fragment.SingleFragment;
 
 public class MainActivity extends BaseActivity {
 
-    private ViewPager mainPageVp;
+    public static  ViewPager mainPageVp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +40,21 @@ public class MainActivity extends BaseActivity {
     }
 
     private Fragment getFragment(int position) {
+        Fragment fragment = null;
         if (position == 0) {
-            return new SingleFragment();
+            fragment = new SingleFragment();
         } else if (position == 1) {
-            return new Fragment();
+            fragment = new GroupFragment();
         }
-        return new Fragment();
+        return fragment;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        int grougDissolve = getIntent().getIntExtra("grougDissolve", 0);
+        if (grougDissolve == 101){
+            mainPageVp.setCurrentItem(1);
+        }
     }
 }
