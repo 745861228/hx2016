@@ -24,7 +24,7 @@ import static android.content.ContentValues.TAG;
 public class MyService extends Service {
 
     /**
-     * 请求加好友的通知
+     * 发送一个通知
      *
      * @param username
      * @param message
@@ -53,13 +53,16 @@ public class MyService extends Service {
     }
 
 
+    /**
+     * 对服务器返回的好友状态进行监听
+     */
     private void friendListener() {
         EMClient.getInstance().contactManager().setContactListener(new EMContactListener() {
             @Override
             public void onContactAgreed(String username) {
-                Log.i(TAG, "onContactAgreed: "+username);
+                Log.i(TAG, "onContactAgreed: " + username);
                 //好友请求被同意
-              //  sendNotification(username, username + "同意了你的请求,找他聊聊天吧", ChatActivity.class);
+                //  sendNotification(username, username + "同意了你的请求,找他聊聊天吧", ChatActivity.class);
                 try {
                     DBUtils.getDbUtilsInstance().saveOrUpdate(new FriendBean(username));
                 } catch (DbException e) {
@@ -71,7 +74,7 @@ public class MyService extends Service {
             @Override
             public void onContactRefused(String username) {
                 //好友请求被拒绝
-                Log.i(TAG, "onContactAgreed: "+username);
+                Log.i(TAG, "onContactAgreed: " + username);
             }
 
             @Override
