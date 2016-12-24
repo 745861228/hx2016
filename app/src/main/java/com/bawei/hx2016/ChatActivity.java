@@ -179,10 +179,10 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
      * 刷新消息
      */
     private void notifyMessage() {
-        if (messages.size() > chatList.getLastVisiblePosition()) {
-            chatList.smoothScrollToPosition(messages.size());
-        }
         mesAdapter.notifyDataSetChanged();
+        if (messages.size() > chatList.getLastVisiblePosition()) {
+            chatList.setSelection(mesAdapter.getCount());
+        }
     }
 
     @Override
