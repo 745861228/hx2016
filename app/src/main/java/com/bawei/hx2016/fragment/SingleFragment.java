@@ -1,9 +1,11 @@
 package com.bawei.hx2016.fragment;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +16,13 @@ import android.widget.TextView;
 
 import com.bawei.hx2016.AddFriendActivity;
 import com.bawei.hx2016.R;
+import com.bawei.hx2016.bean.FriendBean;
+import com.bawei.hx2016.utils.DBUtils;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.HyphenateException;
+
+import org.xutils.db.Selector;
+import org.xutils.ex.DbException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +36,7 @@ public class SingleFragment extends Fragment implements View.OnClickListener {
 
     private View viewRoot;
     private ListView friendLv;
-    private List<String> usernames = new ArrayList<>();
+    private ArrayList<FriendBean> usernames = new ArrayList<>();
     private BaseAdapter baseAdapter;
     private Button addFriendBut;
 
@@ -43,48 +50,61 @@ public class SingleFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initData() {
+        usernames.clear();
         try {
-            usernames.clear();
-            usernames.addAll(EMClient.getInstance().contactManager().getAllContactsFromServer());
-        } catch (HyphenateException e) {
+            List<FriendBean> all = DBUtils.getDbUtilsInstance().findAll(FriendBean.class);//通过类型查找
+            for (int i = 0; i < all.size(); i++) {
+                usernames.add(all.get(0));
+            }
+        } catch (DbException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initData();
+        baseAdapter.notifyDataSetChanged();
     }
 
     /**
      * 查找控件
      */
     private void initView() {
+
         friendLv = (ListView) viewRoot.findViewById(R.id.friend_lv);
         addFriendBut = (Button) viewRoot.findViewById(R.id.add_friend_but);
 
         addFriendBut.setOnClickListener(this);
+        if(usernames.size()!=0)
+        {
+            baseAdapter = new BaseAdapter() {
+                @Override
+                public int getCount() {
+                    return usernames.size();
+                }
 
+                @Override
+                public Object getItem(int position) {
+                    return null;
+                }
 
-        baseAdapter = new BaseAdapter() {
-            @Override
-            public int getCount() {
-                return usernames.size();
-            }
+                @Override
+                public long getItemId(int position) {
+                    return 0;
+                }
 
-            @Override
-            public Object getItem(int position) {
-                return null;
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return 0;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                TextView textView = new TextView(getActivity());
-                textView.setText(usernames.get(position));
-                return textView;
-            }
-        };
-        friendLv.setAdapter(baseAdapter);
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    TextView textView = new TextView(getActivity());
+                    textView.setText(usernames.get(position).getName());
+                    textView.setPadding(20,20,20,20);
+                    return textView;
+                }
+            };
+            friendLv.setAdapter(baseAdapter);
+        }
     }
 
     @Override
