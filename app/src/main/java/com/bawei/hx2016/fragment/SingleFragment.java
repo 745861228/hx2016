@@ -50,16 +50,12 @@ public class SingleFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initData() {
+        usernames.clear();
         try {
             List<FriendBean> all = DBUtils.getDbUtilsInstance().findAll(FriendBean.class);//通过类型查找
             if (all == null)
                 return;
-            usernames.clear();
-            usernames.addAll(all);
 
-            if (DBUtils.getDbUtilsInstance().findAll(FriendBean.class) == null) {
-                return;
-            }
             usernames.addAll(all);
 
         } catch (DbException e) {

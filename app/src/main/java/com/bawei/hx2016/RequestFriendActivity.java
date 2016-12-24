@@ -40,7 +40,7 @@ public class RequestFriendActivity extends BaseActivity {
      * 获取数据
      */
     private void initData() {
-        String userName = getIntent().getStringExtra("userName");
+        String userName = getIntent().getStringExtra("requestUserName");
         userNames.add(userName);
     }
 

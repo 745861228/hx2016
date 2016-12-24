@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -44,6 +43,7 @@ public class MyService extends Service {
         builder.setSmallIcon(R.mipmap.ic_launcher);
         //设置builder
         builder.setTicker(message);
+        builder.setContentText(message);
         builder.setAutoCancel(true);
         builder.setWhen(System.currentTimeMillis());
         builder.setDefaults(Notification.DEFAULT_ALL);
@@ -55,6 +55,34 @@ public class MyService extends Service {
 
         //发送通知
         notificationManager.notify(653, builder.build());
+    }
+   /**
+     * 发送一个通知
+     *
+     * @param username
+     * @param message
+     * @param activity
+     */
+    private void sendRequestNotification(String username, String message, Class activity) {
+        //得到通知管理类
+        NotificationManager notificationManager = (NotificationManager) getSystemService(this.NOTIFICATION_SERVICE);
+        //创建一个新通知
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        //设置builder
+        builder.setTicker(message);
+        builder.setContentText(message);
+        builder.setAutoCancel(true);
+        builder.setWhen(System.currentTimeMillis());
+        builder.setDefaults(Notification.DEFAULT_ALL);
+
+        Intent intent = new Intent(this, activity);
+        intent.putExtra("requestUserName", username);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        builder.setContentIntent(pendingIntent);
+
+        //发送通知
+        notificationManager.notify(659, builder.build());
     }
 
     private void sendEmptyNotification() {
@@ -78,7 +106,6 @@ public class MyService extends Service {
             //收到消息
             if (isShow && singleCharListener != null) {
                 singleCharListener.receiveMessage(messages);
-                sendEmptyNotification();
             } else {
                 sendNotification(messages.get(0).getUserName(), "你接收到" + messages.size() + "条消息", ChatActivity.class);
             }
@@ -136,7 +163,7 @@ public class MyService extends Service {
                 } catch (DbException e) {
                     e.printStackTrace();
                 }
-                sendNotification(username, username + "同意了你的请求,找他聊聊天吧", ChatActivity.class);
+                sendRequestNotification(username, username + "同意了你的请求,找他聊聊天吧", ChatActivity.class);
             }
 
             @Override
@@ -148,7 +175,7 @@ public class MyService extends Service {
             @Override
             public void onContactInvited(String username, String reason) {
                 //收到好友邀请
-                sendNotification(username, username + "请求加你为好友", RequestFriendActivity.class);
+                sendRequestNotification(username, username + "请求加你为好友", RequestFriendActivity.class);
             }
 
             @Override
