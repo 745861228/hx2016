@@ -7,6 +7,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.bawei.hx2016.ChatActivity;
 import com.bawei.hx2016.R;
@@ -17,6 +18,8 @@ import com.hyphenate.EMContactListener;
 import com.hyphenate.chat.EMClient;
 
 import org.xutils.ex.DbException;
+
+import static android.content.ContentValues.TAG;
 
 public class MyService extends Service {
 
@@ -54,7 +57,9 @@ public class MyService extends Service {
         EMClient.getInstance().contactManager().setContactListener(new EMContactListener() {
             @Override
             public void onContactAgreed(String username) {
+                Log.i(TAG, "onContactAgreed: "+username);
                 //好友请求被同意
+              //  sendNotification(username, username + "同意了你的请求,找他聊聊天吧", ChatActivity.class);
                 try {
                     DBUtils.getDbUtilsInstance().saveOrUpdate(new FriendBean(username));
                 } catch (DbException e) {
@@ -66,6 +71,7 @@ public class MyService extends Service {
             @Override
             public void onContactRefused(String username) {
                 //好友请求被拒绝
+                Log.i(TAG, "onContactAgreed: "+username);
             }
 
             @Override
