@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
 
-import com.bawei.hx2016.R;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -15,7 +14,13 @@ public class BaseActivity extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
     }
 
-    public void enterActivity(Class activity){
-        startActivity(new Intent(this,activity));
+    protected void enterActivity(Class activity) {
+        startActivity(new Intent(this, activity));
+    }
+
+    public void enterActivity(Class activity, String key, String value) {
+        Intent intent = new Intent(this, activity);
+        intent.putExtra(key, value);
+        startActivity(intent);
     }
 }

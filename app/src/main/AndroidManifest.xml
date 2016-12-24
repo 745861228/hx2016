@@ -73,6 +73,7 @@
             android:exported="true" />
 
         <activity android:name=".RequestFriendActivity"></activity>
+        <activity android:name=".ChatActivity$ChatActivity" />
     </application>
 
 </manifest>

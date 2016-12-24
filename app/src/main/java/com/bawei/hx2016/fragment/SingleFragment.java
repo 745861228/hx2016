@@ -1,11 +1,9 @@
 package com.bawei.hx2016.fragment;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +16,7 @@ import android.widget.TextView;
 import com.bawei.hx2016.AddFriendActivity;
 import com.bawei.hx2016.ChatActivity;
 import com.bawei.hx2016.R;
+import com.bawei.hx2016.base.BaseActivity;
 import com.bawei.hx2016.bean.FriendBean;
 import com.bawei.hx2016.utils.DBUtils;
 import com.hyphenate.chat.EMClient;
@@ -51,12 +50,14 @@ public class SingleFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initData() {
-        usernames.clear();
         try {
             List<FriendBean> all = DBUtils.getDbUtilsInstance().findAll(FriendBean.class);//通过类型查找
+            if (all == null)
+                return;
+            usernames.clear();
+            usernames.addAll(all);
 
-            if(DBUtils.getDbUtilsInstance().findAll(FriendBean.class)==null)
-            {
+            if (DBUtils.getDbUtilsInstance().findAll(FriendBean.class) == null) {
                 return;
             }
             usernames.addAll(all);
@@ -82,40 +83,46 @@ public class SingleFragment extends Fragment implements View.OnClickListener {
         addFriendBut = (Button) viewRoot.findViewById(R.id.add_friend_but);
 
         addFriendBut.setOnClickListener(this);
-
         friendLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent in=new Intent(getActivity(), ChatActivity.class);
-                in.putExtra("userName",usernames.get(position).getName());
+                Intent in = new Intent(getActivity(), ChatActivity.class);
+                in.putExtra("userName", usernames.get(position).getName());
                 startActivity(in);
             }
         });
-            baseAdapter = new BaseAdapter() {
-                @Override
-                public int getCount() {
-                    return usernames.size();
-                }
 
-                @Override
-                public Object getItem(int position) {
-                    return null;
-                }
+        baseAdapter = new BaseAdapter() {
+            @Override
+            public int getCount() {
+                return usernames.size();
+            }
 
-                @Override
-                public long getItemId(int position) {
-                    return 0;
-                }
+            @Override
+            public Object getItem(int position) {
+                return null;
+            }
 
-                @Override
-                public View getView(int position, View convertView, ViewGroup parent) {
-                    TextView textView = new TextView(getActivity());
-                    textView.setText(usernames.get(position).getName());
-                    textView.setPadding(20,20,20,20);
-                    return textView;
-                }
-            };
-            friendLv.setAdapter(baseAdapter);
+            @Override
+            public long getItemId(int position) {
+                return 0;
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                TextView textView = new TextView(getActivity());
+                textView.setText(usernames.get(position).getName());
+                textView.setPadding(20, 20, 20, 20);
+                return textView;
+            }
+        };
+        friendLv.setAdapter(baseAdapter);
+        friendLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ((BaseActivity) getActivity()).enterActivity(ChatActivity.class, "userName", usernames.get(position).getName());
+            }
+        });
 
     }
 
