@@ -12,8 +12,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bawei.hx2016.base.BaseActivity;
+import com.bawei.hx2016.bean.FriendBean;
+import com.bawei.hx2016.utils.DBUtils;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.HyphenateException;
+
+import org.xutils.ex.DbException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +56,11 @@ public class RequestFriendActivity extends BaseActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
+                            DBUtils.getDbUtilsInstance().saveOrUpdate(new FriendBean(userNames.get(position)));
                             EMClient.getInstance().contactManager().acceptInvitation(userNames.get(position));
                         } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        } catch (DbException e) {
                             e.printStackTrace();
                         }
                     }
@@ -67,6 +74,7 @@ public class RequestFriendActivity extends BaseActivity {
                         }
                     }
                 }).show();
+
             }
         });
     }

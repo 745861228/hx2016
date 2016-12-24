@@ -11,10 +11,22 @@ import android.support.v4.app.NotificationCompat;
 import com.bawei.hx2016.ChatActivity;
 import com.bawei.hx2016.R;
 import com.bawei.hx2016.RequestFriendActivity;
+import com.bawei.hx2016.bean.FriendBean;
+import com.bawei.hx2016.utils.DBUtils;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.chat.EMClient;
 
+import org.xutils.ex.DbException;
+
 public class MyService extends Service {
+
+    /**
+     * 请求加好友的通知
+     *
+     * @param username
+     * @param message
+     * @param activity
+     */
     private void sendNotification(String username, String message, Class activity) {
         //得到通知管理类
         NotificationManager notificationManager = (NotificationManager) getSystemService(this.NOTIFICATION_SERVICE);
@@ -22,7 +34,7 @@ public class MyService extends Service {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setSmallIcon(R.mipmap.ic_launcher);
         //设置builder
-        builder.setTicker("message");
+        builder.setTicker("好友请求");
         builder.setContentText(message);
         builder.setAutoCancel(true);
         builder.setWhen(System.currentTimeMillis());
@@ -43,6 +55,11 @@ public class MyService extends Service {
             @Override
             public void onContactAgreed(String username) {
                 //好友请求被同意
+                try {
+                    DBUtils.getDbUtilsInstance().saveOrUpdate(new FriendBean(username));
+                } catch (DbException e) {
+                    e.printStackTrace();
+                }
                 sendNotification(username, username + "同意了你的请求,找他聊聊天吧", ChatActivity.class);
             }
 

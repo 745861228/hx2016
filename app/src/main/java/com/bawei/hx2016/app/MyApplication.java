@@ -11,6 +11,8 @@ import com.bawei.hx2016.services.MyService;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
 
+import org.xutils.x;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -31,6 +33,23 @@ public class MyApplication extends Application {
         appContext = this.getApplicationContext();
 
 
+        initEM();
+        initXUtils();
+
+
+    }
+
+    /**
+     * 初始化xUtils
+     */
+    private void initXUtils() {
+        x.Ext.init(this);
+    }
+
+    /**
+     * 初始化环信
+     */
+    private void initEM() {
         //环信初始化配置
         EMOptions options = new EMOptions();
         // 默认添加好友时，是不需要验证的，改成需要验证
