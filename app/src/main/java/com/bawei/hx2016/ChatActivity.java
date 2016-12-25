@@ -5,16 +5,16 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
 
+import com.bawei.hx2016.adapater.ChatRecyalerViewAdapater;
 import com.bawei.hx2016.base.BaseActivity;
 import com.bawei.hx2016.interfaces.SingleCharListener;
 import com.bawei.hx2016.services.MyService;
@@ -28,17 +28,16 @@ import java.util.List;
 
 public class ChatActivity extends BaseActivity implements View.OnClickListener {
 
-    private ListView chatList;
+    private RecyclerView chat_recyclerView;
     private EditText chatContentEt;
     private String userName;
     private Button userNameBut;
-    public static int tag=0;
     /**
      * 所有会话消息
      */
     List<EMMessage> messages = new ArrayList<>();
     private Button chatSendBut;
-    private BaseAdapter mesAdapter;
+    private ChatRecyalerViewAdapater chatRecyalerViewAdapater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,31 +53,9 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
      * 设置聊天界面listAdapter
      */
     private void initChatListAdapter() {
-        mesAdapter = new BaseAdapter() {
-            @Override
-            public int getCount() {
-                return messages.size();
-            }
-
-            @Override
-            public Object getItem(int position) {
-                return null;
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return 0;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                TextView msg = new TextView(ChatActivity.this);
-                msg.setPadding(30, 30, 30, 30);
-                msg.setText(messages.get(position).getFrom() + " ： " + messages.get(position).getBody());
-                return msg;
-            }
-        };
-        chatList.setAdapter(mesAdapter);
+        chat_recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+        chatRecyalerViewAdapater = new ChatRecyalerViewAdapater(ChatActivity.this, messages);
+        chat_recyclerView.setAdapter(chatRecyalerViewAdapater);
     }
 
 
@@ -90,8 +67,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
      * myService的连接
      */
     private ServiceConnection conn = new ServiceConnection() {
-
-
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             myBinder = (MyService.MyBinder) service;
@@ -128,7 +103,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-        chatList.setSelection(mesAdapter.getCount());
     }
 
     /**
@@ -155,7 +129,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
      * 初始化控件
      */
     private void initView() {
-        chatList = (ListView) findViewById(R.id.chat_list);
+        chat_recyclerView = (RecyclerView) findViewById(R.id.chat_recyclerView);
         userNameBut = (Button) findViewById(R.id.username_but);
         chatContentEt = (EditText) findViewById(R.id.chat_content_et);
         chatSendBut = (Button) findViewById(R.id.chat_send_but);
@@ -188,8 +162,13 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
      * 刷新消息
      */
     private void notifyMessage() {
-        mesAdapter.notifyDataSetChanged();
-        chatList.setSelection(mesAdapter.getCount());
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                chatRecyalerViewAdapater.notifyDataSetChanged();
+                chat_recyclerView.scrollToPosition(messages.size()-1);
+            }
+        });
     }
 
     @Override

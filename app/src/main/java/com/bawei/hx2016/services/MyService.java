@@ -12,6 +12,7 @@ import android.util.Log;
 import com.bawei.hx2016.ChatActivity;
 import com.bawei.hx2016.R;
 import com.bawei.hx2016.RequestFriendActivity;
+import com.bawei.hx2016.adapater.ChatRecyalerViewAdapater;
 import com.bawei.hx2016.bean.FriendBean;
 import com.bawei.hx2016.interfaces.SingleCharListener;
 import com.bawei.hx2016.utils.DBUtils;
