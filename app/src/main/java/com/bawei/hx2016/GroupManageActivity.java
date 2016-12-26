@@ -106,7 +106,7 @@ public class GroupManageActivity extends BaseActivity implements View.OnClickLis
      * 设置群成员列表
      */
     private void setListAdapter() {
-        BaseAdapter baseAdapter =  new BaseAdapter() {
+        BaseAdapter baseAdapter = new BaseAdapter() {
             @Override
             public int getCount() {
                 return groupMemberList.size();
@@ -126,9 +126,9 @@ public class GroupManageActivity extends BaseActivity implements View.OnClickLis
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView textView = new TextView(GroupManageActivity.this);
 
-                if (groupMemberList.get(position).equals(owner)){
-                    textView.setText(groupMemberList.get(position)+"(群主)");
-                }else {
+                if (groupMemberList.get(position).equals(owner)) {
+                    textView.setText(groupMemberList.get(position) + "(群主)");
+                } else {
                     textView.setText(groupMemberList.get(position));
                 }
                 return textView;
@@ -158,7 +158,7 @@ public class GroupManageActivity extends BaseActivity implements View.OnClickLis
                  * @param groupId， 群ID
                  * @throws EasemobException
                  */
-                if (isGroupShield){
+                if (isGroupShield) {
                     new Thread() {
                         @Override
                         public void run() {
@@ -170,7 +170,7 @@ public class GroupManageActivity extends BaseActivity implements View.OnClickLis
                         }
                     }.start();
                     Toast.makeText(GroupManageActivity.this, "您已经屏蔽该群！！！", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     new Thread() {
                         @Override
                         public void run() {
@@ -193,18 +193,55 @@ public class GroupManageActivity extends BaseActivity implements View.OnClickLis
                     e.printStackTrace();
                 }
                 Intent intent = new Intent(GroupManageActivity.this, MainActivity.class);
-                intent.putExtra("grougDissolve",101);
+                intent.putExtra("grougDissolve", 101);
                 startActivity(intent);
                 break;
 
             case R.id.groupAddMember_but:           //添加群成员
-
+                showAddGroupMember();
                 break;
 
             case R.id.groupKickOutMember_but:       //踢出群成员
 
                 break;
         }
+    }
+
+    /**
+     * 添加群成员
+     */
+    private void showAddGroupMember() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(GroupManageActivity.this);
+        builder.setCancelable(false);
+        builder.setTitle("添加群成员");
+        final EditText editText = new EditText(this);
+        editText.setHint("请输入要添加的群成员Id");
+        builder.setView(editText);
+        builder.setPositiveButton("确认",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        if (EMClient.getInstance().getCurrentUser().equals(owner)) {
+                            new Thread() {
+                                @Override
+                                public void run() {
+                                    //群主加人调用此方法
+                                    try {
+                                        EMClient.getInstance().groupManager().addUsersToGroup(groupId, new String[]{editText.getText().toString().trim()});//需异步处理
+                                    } catch (HyphenateException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }.start();
+                        }
+                    }
+                });
+        builder.setNegativeButton("取消",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                    }
+                });
+        builder.show();
     }
 
     /**

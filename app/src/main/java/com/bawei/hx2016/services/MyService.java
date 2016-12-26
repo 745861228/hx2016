@@ -17,6 +17,7 @@ import com.bawei.hx2016.bean.FriendBean;
 import com.bawei.hx2016.interfaces.SingleCharListener;
 import com.bawei.hx2016.utils.DBUtils;
 import com.hyphenate.EMContactListener;
+import com.hyphenate.EMGroupChangeListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
@@ -57,7 +58,8 @@ public class MyService extends Service {
         //发送通知
         notificationManager.notify(653, builder.build());
     }
-   /**
+
+    /**
      * 发送一个通知
      *
      * @param username
@@ -193,11 +195,15 @@ public class MyService extends Service {
     }
 
 
-    public MyService() {
+    @Override
+    public void onCreate() {
+        super.onCreate();
         //添加好友状态监听事件
         friendListener();
         //添加单人聊天监听
         initSingleChatListener();
+        //添加添加群成员监听
+        initGroupChatListener();
     }
 
     @Override
@@ -234,4 +240,69 @@ public class MyService extends Service {
         super.onDestroy();
         EMClient.getInstance().chatManager().removeMessageListener(msgListener);
     }
+
+    /**
+     * 群组事件监听
+     */
+
+    /**
+     * 初始化群组聊天的监听
+     */
+    private void initGroupChatListener() {
+        EMClient.getInstance().groupManager().addGroupChangeListener(groupChangeListener);
+    }
+
+    private EMGroupChangeListener groupChangeListener = new EMGroupChangeListener() {
+        @Override
+        public void onUserRemoved(String groupId, String groupName) {
+            //当前用户被管理员移除出群组
+        }
+
+        @Override
+        public void onInvitationReceived(String groupId, String groupName, String inviter, String reason) {
+            Log.i(TAG, "onInvitationReceived: ");
+            //收到加入群组的邀请
+        }
+
+        @Override
+        public void onInvitationDeclined(String groupId, String invitee, String reason) {
+            //群组邀请被拒绝
+        }
+
+
+        @Override
+        public void onApplicationReceived(String groupId, String groupName, String applyer, String reason) {
+            //收到加群申请
+            Log.i(TAG, "onApplicationReceived: ");
+
+
+        }
+
+        @Override
+        public void onApplicationAccept(String groupId, String groupName, String accepter) {
+            //加群申请被同意
+        }
+
+        @Override
+        public void onApplicationDeclined(String groupId, String groupName, String decliner, String reason) {
+            // 加群申请被拒绝
+        }
+
+        @Override
+        public void onInvitationAccepted(String s, String s1, String s2) {
+            //群组邀请被接受
+        }
+
+        @Override
+        public void onGroupDestroyed(String s, String s1) {
+            //群组被创建者解散
+        }
+
+        @Override
+        public void onAutoAcceptInvitationFromGroup(String s, String s1, String s2) {
+            Log.i(TAG, "onAutoAcceptInvitationFromGroup: ");
+        }
+    };
+
+
 }

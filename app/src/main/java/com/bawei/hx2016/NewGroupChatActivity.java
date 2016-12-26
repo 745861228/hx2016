@@ -60,7 +60,7 @@ public class NewGroupChatActivity extends BaseActivity implements View.OnClickLi
                 if (!TextUtils.isEmpty(newGroupName)&&!TextUtils.isEmpty(newGroupInfo)){
                     EMGroupManager.EMGroupOptions option = new EMGroupManager.EMGroupOptions();
                     option.maxUsers = 200;
-                    option.style = EMGroupManager.EMGroupStyle.EMGroupStylePrivateMemberCanInvite;
+                    option.style = EMGroupManager.EMGroupStyle.EMGroupStylePublicJoinNeedApproval;
                     try {
                         EMClient.getInstance().groupManager().createGroup(newGroupName, newGroupInfo, new String[]{}, "", option);
                         finish();

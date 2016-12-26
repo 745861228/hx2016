@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bawei.hx2016.AddGroupActivity;
 import com.bawei.hx2016.GroupMessageActivity;
 import com.bawei.hx2016.NewGroupChatActivity;
 import com.bawei.hx2016.R;
@@ -100,7 +101,7 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             //添加群
             case R.id.addGroup_but:
-
+                startActivity(new Intent(getActivity(), AddGroupActivity.class));
                 break;
             //新建群
             case R.id.newGroup_but:
