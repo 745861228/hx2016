@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.bawei.hx2016.services.MyService;
+import com.easemob.easeui.controller.EaseUI;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
 
@@ -53,6 +54,8 @@ public class MyApplication extends Application {
         //环信初始化配置
         EMOptions options = new EMOptions();
         // 默认添加好友时，是不需要验证的，改成需要验证
+        //环信ui初始化
+        EaseUI.getInstance().init(this, options);
         options.setAcceptInvitationAlways(false);
         int pid = android.os.Process.myPid();
         String processAppName = getAppName(pid);

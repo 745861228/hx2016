@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="C:\Users\ASUS\AndroidStudioProjects\hx2016\easeui\assets"/><source path="C:\Users\ASUS\AndroidStudioProjects\hx2016\easeui\build\generated\assets\shaders\debug"/></dataSet><dataSet config="debug"><source path="C:\Users\ASUS\AndroidStudioProjects\hx2016\easeui\build-types\debug\assets"/></dataSet></merger>
