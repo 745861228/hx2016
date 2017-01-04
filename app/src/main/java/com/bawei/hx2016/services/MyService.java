@@ -267,6 +267,7 @@ public class MyService extends Service {
         @Override
         public void onInvitationDeclined(String groupId, String invitee, String reason) {
             //群组邀请被拒绝
+            Log.i(TAG, "onInvitationDeclined: ");
         }
 
 
@@ -281,21 +282,28 @@ public class MyService extends Service {
         @Override
         public void onApplicationAccept(String groupId, String groupName, String accepter) {
             //加群申请被同意
+            Log.i(TAG, "onApplicationAccept: ");
+
         }
 
         @Override
         public void onApplicationDeclined(String groupId, String groupName, String decliner, String reason) {
             // 加群申请被拒绝
+            Log.i(TAG, "onApplicationDeclined: ");
+
         }
 
         @Override
         public void onInvitationAccepted(String s, String s1, String s2) {
             //群组邀请被接受
+            Log.i(TAG, "onInvitationAccepted: ");
+
         }
 
         @Override
         public void onGroupDestroyed(String s, String s1) {
             //群组被创建者解散
+            Log.i(TAG, "onGroupDestroyed: ");
         }
 
         @Override
@@ -303,6 +311,10 @@ public class MyService extends Service {
             Log.i(TAG, "onAutoAcceptInvitationFromGroup: ");
         }
     };
+
+
+
+
 
 
 }

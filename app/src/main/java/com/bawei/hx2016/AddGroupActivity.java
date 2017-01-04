@@ -1,6 +1,8 @@
 package com.bawei.hx2016;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -75,9 +77,32 @@ public class AddGroupActivity extends BaseActivity implements View.OnClickListen
         recyclerAdapter = new RecyclerAdapter<EMGroupInfo>(this, emGroupInfoList, R.layout.chatrecyclerview_item) {
 
             @Override
-            public void convert(RecyclerHolder holder, EMGroupInfo data, int position) {
+            public void convert(RecyclerHolder holder, final EMGroupInfo data, int position) {
                 holder.setText(R.id.chat_recyclerView_tv, data.getGroupName());
-
+                holder.getItemView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(AddGroupActivity.this);
+                        builder.setTitle("确认加入该群组?").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //如果群开群是自由加入的，即group.isMembersOnly()为false，直接join
+                                new Thread() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            EMClient.getInstance().groupManager().joinGroup(data.getGroupId());//需异步处理
+                                        } catch (HyphenateException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }.start();
+                                //需要申请和验证才能加入的，即group.isMembersOnly()为true，调用下面方法
+//                                EMClient.getInstance().groupManager().applyJoinToGroup(groupid, "求加入");//需异步处理
+                            }
+                        }).setNegativeButton("取消", null).show();
+                    }
+                });
             }
         };
         add_group_rv.setAdapter(recyclerAdapter);
